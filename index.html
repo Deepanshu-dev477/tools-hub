@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Tools Directory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #fafaf9;
+            --surface: #ffffff;
+            --surface2: #f4f3f0;
+            --border: rgba(0, 0, 0, 0.08);
+            --border-strong: rgba(0, 0, 0, 0.16);
+            --text: #111110;
+            --text2: #52524e;
+            --text3: #8c8c87;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-pill: 100px;
+            --font-display: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            padding: 3.5rem 0 2.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-eyebrow {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--text3);
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(26px, 4vw, 50px);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            margin-bottom: .75rem;
+        }
+
+        .hero-title .slash {
+            color: var(--text3);
+            font-weight: 400;
+            margin: 0 .2em;
+        }
+
+        .hero-meta {
+            font-size: 14px;
+            color: var(--text3);
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: var(--radius-pill);
+            background: #e8f5e9;
+            color: #2e7d32;
+            letter-spacing: .02em;
+        }
+
+        .dot {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--text3);
+        }
+
+        /* ── Controls ── */
+        .controls {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .search-wrap {
+            position: relative;
+            max-width: 480px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text3);
+            pointer-events: none;
+            display: flex;
+        }
+
+        .search-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        #dir-search {
+            width: 100%;
+            height: 40px;
+            padding: 0 14px 0 38px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-md);
+            background: var(--surface);
+            color: var(--text);
+            outline: none;
+            transition: border-color .15s, box-shadow .15s;
+        }
+
+        #dir-search::placeholder {
+            color: var(--text3);
+        }
+
+        #dir-search:focus {
+            border-color: #555;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, .06);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--text3);
+            min-width: 64px;
+            flex-shrink: 0;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .chip {
+            height: 30px;
+            padding: 0 13px;
+            border-radius: var(--radius-pill);
+            font-size: 12.5px;
+            font-family: var(--font-body);
+            font-weight: 400;
+            border: 1px solid var(--border-strong);
+            background: transparent;
+            color: var(--text2);
+            cursor: pointer;
+            transition: all .12s;
+            white-space: nowrap;
+        }
+
+        .chip:hover {
+            background: var(--surface2);
+            color: var(--text);
+            border-color: #999;
+        }
+
+        .chip.on {
+            background: var(--text);
+            color: #fff;
+            border-color: var(--text);
+        }
+
+        /* ── Results bar ── */
+        .results-bar {
+            padding: 1rem 0 .75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.25rem;
+        }
+
+        .results-count {
+            font-size: 13px;
+            color: var(--text3);
+        }
+
+        .results-count b {
+            color: var(--text2);
+            font-weight: 500;
+        }
+
+        /* ── Grid ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 10px;
+        }
+
+        /* ── Card ── */
+        .card {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            color: inherit;
+            transition: border-color .14s, transform .14s, box-shadow .14s;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            border-color: rgba(0, 0, 0, .22);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .07), 0 1px 4px rgba(0, 0, 0, .05);
+        }
+
+        .card:active {
+            transform: translateY(0);
+        }
+
+        /* icon strip */
+        .card-icon-wrap {
+            width: 100%;
+            padding: 16px 16px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--surface2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+        }
+
+        .card-icon img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .card-icon .icon-letter {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text2);
+            line-height: 1;
+        }
+
+        .card-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        /* pill colors */
+        .pill {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: var(--radius-pill);
+            letter-spacing: .03em;
+            text-transform: uppercase;
+        }
+
+        .p-uxui {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        .p-animation {
+            background: #fff1e6;
+            color: #c2410c;
+        }
+
+        .p-cssjava {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .p-colours {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        .p-typography {
+            background: #fce7f3;
+            color: #9d174d;
+        }
+
+        .p-inspiration {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .p-education {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .p-stocks {
+            background: #f5f5f4;
+            color: #44403c;
+        }
+
+        .p-flexbox {
+            background: #f0fdf4;
+            color: #15803d;
+        }
+
+        .p-cssgrid {
+            background: #f7fee7;
+            color: #3f6212;
+        }
+
+        .p-logo {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .p-cms {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+        .p-other {
+            background: #f5f5f4;
+            color: #57534e;
+        }
+
+        .card-body {
+            padding: 10px 16px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1;
+        }
+
+        .card-name {
+            font-family: var(--font-display);
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.2;
+            letter-spacing: -.01em;
+        }
+
+        .card-sub {
+            font-size: 12px;
+            color: var(--text2);
+            line-height: 1.5;
+            flex: 1;
+            font-weight: 300;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 8px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text3);
+            letter-spacing: .02em;
+            text-transform: uppercase;
+        }
+
+        .card-footer svg {
+            width: 10px;
+            height: 10px;
+            flex-shrink: 0;
+        }
+
+        /* ── Empty ── */
+        .empty {
+            grid-column: 1 / -1;
+            padding: 4rem 2rem;
+            text-align: center;
+            color: var(--text3);
+        }
+
+        .empty strong {
+            display: block;
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text2);
+            margin-bottom: .5rem;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 600px) {
+            .page {
+                padding: 0 1rem 3rem;
+            }
+
+            .hero {
+                padding: 2rem 0 1.75rem;
+            }
+
+            .filter-group {
+                flex-direction: column;
+                gap: .5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+
+        <header class="hero">
+            <div class="hero-eyebrow">Curated collection</div>
+            <h1 class="hero-title">
+                Web &amp; Graphic<span class="slash">/</span>Design &amp; Development<span class="slash">/</span>Tools
+                &amp; Assets
+            </h1>
+            <div class="hero-meta">
+                <span class="hero-badge">
+                    <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
+                        <circle cx="4" cy="4" r="4" />
+                    </svg>
+                    Mostly free
+                </span>
+                <span class="dot"></span>
+                <span>190+ resources for designers &amp; developers</span>
+            </div>
+        </header>
+
+        <div class="controls">
+            <div class="search-wrap">
+                <span class="search-icon">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6">
+                        <circle cx="7" cy="7" r="4.5" />
+                        <path d="M10.5 10.5l3.5 3.5" />
+                    </svg>
+                </span>
+                <input id="dir-search" type="text" placeholder="Search tools, subjects, descriptions…"
+                    autocomplete="off" spellcheck="false">
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">Category</span>
+                <div class="chips" id="catRow">
+                    <button class="chip on" data-cat="all">All</button>
+                    <button class="chip" data-cat="web">Web design / dev</button>
+                    <button class="chip" data-cat="graphic">Graphic design</button>
+                </div>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">Subject</span>
+                <div class="chips" id="subRow">
+                    <button class="chip on" data-sub="all">Any</button>
+                    <button class="chip" data-sub="typography">Typography</button>
+                    <button class="chip" data-sub="stocks">Assets</button>
+                    <button class="chip" data-sub="colours">Colours</button>
+                    <button class="chip" data-sub="uxui">UX / UI</button>
+                    <button class="chip" data-sub="animation">Animation</button>
+                    <button class="chip" data-sub="cssjava">CSS / JS</button>
+                    <button class="chip" data-sub="flexbox">Flexbox</button>
+                    <button class="chip" data-sub="cssgrid">Grid</button>
+                    <button class="chip" data-sub="logo">Logo</button>
+                    <button class="chip" data-sub="cms">CMS</button>
+                    <button class="chip" data-sub="education">Education</button>
+                    <button class="chip" data-sub="inspiration">Inspiration</button>
+                    <button class="chip" data-sub="other">Other</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-bar">
+            <div class="results-count" id="dir-count">Loading…</div>
+        </div>
+
+        <div class="grid" id="dir-grid"></div>
+    </div>
+
+    <script>
+        const TOOLS = [
+            { name: "HTTPie AI", url: "https://httpie.io/app", favicon: "https://httpie.io/app/Favicons/favicon-96x96.png", sub: "AI assistant that generates HTTP requests from plain-language prompts.", cats: ["web"], subs: ["other"] },
+            { name: "Simple PDF", url: "https://simplepdf.eu/", favicon: "https://simplepdf.eu/favicon.ico", sub: "Privacy-first PDF editor — data never leaves your browser.", cats: ["graphic", "web"], subs: ["other"] },
+            { name: "Laws of UX", url: "https://lawsofux.com/", favicon: "https://lawsofux.com/icons/favicon.svg", sub: "Best practices for building user interfaces, beautifully presented.", cats: ["web"], subs: ["education", "uxui"] },
+            { name: "Apache ECharts", url: "https://echarts.apache.org/", favicon: "https://echarts.apache.org/en/images/favicon.png", sub: "Open source JavaScript visualization library for the web.", cats: ["web"], subs: ["cssjava"] },
+            { name: "Chart.js", url: "https://www.chartjs.org/", favicon: "https://www.chartjs.org/favicon.ico", sub: "Simple yet flexible JavaScript charting for the modern web.", cats: ["web"], subs: ["cssjava"] },
+            { name: "Web Page Design", url: "https://webpagedesign.io/", favicon: "https://webpagedesign.io/wp-content/uploads/2022/06/cropped-fab-icon-192x192.png", sub: "Free Figma and Adobe XD templates for any business.", cats: ["web"], subs: ["stocks"] },
+            { name: "UI KIT", url: "https://uikit.to/", favicon: "https://uikit.to/wp-content/uploads/2022/03/cropped-UI-Kit-favicon-192x192.png", sub: "High-quality UI resources crafted by professionals.", cats: ["web"], subs: ["uxui"] },
+            { name: "CSSUI", url: "https://www.cssui.dev/", favicon: "https://www.cssui.dev/favicon-32x32.png", sub: "Interactive components built in pure CSS — zero JavaScript.", cats: ["web"], subs: ["cssjava", "uxui"] },
+            { name: "I Love PDF", url: "https://www.ilovepdf.com/", favicon: "https://www.ilovepdf.com/img/favicons-pdf/favicon-32x32.png", sub: "Every tool you need to work with PDFs, 100% free.", cats: ["graphic", "web"], subs: ["other"] },
+            { name: "remove.bg", url: "https://www.remove.bg/", favicon: "https://www.remove.bg/favicon.ico", sub: "Remove image backgrounds automatically and for free.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Databar.ai", url: "https://databar.ai/", favicon: "https://databar.ai/favicon.png", sub: "Access hundreds of APIs without writing a single line of code.", cats: ["web"], subs: ["stocks", "cssjava"] },
+            { name: "Cleanup.pictures", url: "https://cleanup.pictures/", favicon: "https://cleanup.pictures/favicon.ico", sub: "Remove objects, people, text or defects from photos.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Lorem Space", url: "https://lorem.space", favicon: "", sub: "Categorized placeholder image API for prototypes.", cats: ["graphic", "web"], subs: ["stocks", "cssjava"] },
+            { name: "Microcopy", url: "https://www.microcopy.me", favicon: "https://uploads-ssl.webflow.com/60f2ca55bf9eee1b5bd31b15/60fdc4ea3d8e8525bfdf2815_favicon.png", sub: "Ready-to-use short text snippets for your website.", cats: ["web"], subs: ["stocks", "other"] },
+            { name: "Motion One", url: "https://motion.dev", favicon: "https://motion.dev/layout/favicon.png", sub: "Animation library built on the Web Animations API.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "Retool Utilities", url: "https://retool.com/utilities/", favicon: "https://retool.com/favicon.png", sub: "Handy small tools for developers.", cats: ["web"], subs: ["stocks", "cssjava"] },
+            { name: "BrandColors", url: "http://brandcolors.net", favicon: "http://brandcolors.net/assets/favicons/favicon.ico", sub: "The biggest collection of official brand color codes.", cats: ["web", "graphic"], subs: ["colours"] },
+            { name: "Mantine", url: "https://mantine.dev", favicon: "https://mantine.dev/favicon.svg", sub: "MIT-licensed React components and hooks, focused on accessibility.", cats: ["web"], subs: ["cssjava"] },
+            { name: "HTML Tips", url: "https://markodenic.com/html-tips/", favicon: "https://markodenic.com/wp-content/themes/blog/favicon/favicon-32x32.png", sub: "Useful and sometimes surprising HTML tips.", cats: ["web"], subs: ["cssjava", "education"] },
+            { name: "euismod", url: "https://www.euismod.dev", favicon: "", sub: "Learn CSS Grid interactively — anyone can use it.", cats: ["web"], subs: ["cssgrid", "education"] },
+            { name: "Natto.dev", url: "https://natto.dev/", favicon: "https://natto.dev/favicon.png", sub: "A visual canvas for exploring and prototyping JavaScript.", cats: ["web"], subs: ["cssjava"] },
+            { name: "Charts.css", url: "https://chartscss.org/", favicon: "https://chartscss.org/assets/img/logo.svg", sub: "A CSS framework that styles HTML elements as charts.", cats: ["web"], subs: ["cssjava"] },
+            { name: "Vanilla Animate on Scroll", url: "https://webdesign.tutsplus.com/tutorials/animate-on-scroll-with-javascript--cms-36671", favicon: "", sub: "Tutorial: build scroll animations with vanilla JS.", cats: ["web"], subs: ["cssjava", "animation", "education"] },
+            { name: "Reseter.css", url: "https://github.com/krishdevdb/reseter.css", favicon: "https://github.com/favicon.ico", sub: "CSS reset and normalizer — clears browser inconsistencies.", cats: ["web"], subs: ["cssjava"] },
+            { name: "Tusk", url: "https://www.tusk.page/", favicon: "https://about.tusk.page/favicon.ico", sub: "Simple tool to give and receive anonymous feedback.", cats: ["web", "graphic"], subs: ["other"] },
+            { name: "httpbin.org", url: "https://httpbin.org/", favicon: "https://httpbin.org/static/favicon.ico", sub: "Simple HTTP request and response service for testing.", cats: ["web"], subs: ["cssjava"] },
+            { name: "Deskreen", url: "https://deskreen.com/", favicon: "", sub: "Turn any device into a secondary screen via the browser.", cats: ["web"], subs: ["other"] },
+            { name: "URLcast.io", url: "https://urlcast.io/", favicon: "https://urlcast.io/favicon.ico", sub: "URL shortener with scheduled release times.", cats: ["web"], subs: ["other"] },
+            { name: "Omatsuri", url: "https://omatsuri.app/", favicon: "https://omatsuri.app/assets/favicon.ico", sub: "Open source browser tools for everyday design tasks.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Complete Guide to Centering", url: "https://moderncss.dev/complete-guide-to-centering-in-css/", favicon: "https://moderncss.dev/favicon.png", sub: "Every approach for centering elements in CSS, explained.", cats: ["web"], subs: ["cssjava", "education"] },
+            { name: "svgwaves.io", url: "https://www.svgwaves.io/", favicon: "", sub: "Simple SVG background wave generator.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Facet AI", url: "https://facet.ai/", favicon: "https://facet.ai/favicon.ico", sub: "Content-aware AI image editing right in your browser.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Public APIs", url: "https://github.com/public-apis/public-apis", favicon: "https://github.com/favicon.ico", sub: "A collective list of free APIs for web development.", cats: ["web"], subs: ["stocks", "cssjava"] },
+            { name: "TABPANEL Widget", url: "https://tabpanelwidget.com", favicon: "https://tabpanelwidget.com/favicon-32x32.a6f4bdb8.png", sub: "Accessible tabs, tab panels and accordions.", cats: ["web"], subs: ["uxui", "cssjava"] },
+            { name: "faker.js", url: "https://www.npmjs.com/package/faker", favicon: "https://static.npmjs.com/favicon.ico", sub: "Generate massive amounts of realistic fake data.", cats: ["web"], subs: ["cssjava"] },
+            { name: "Bootstrap 5 Generator", url: "https://generator.ws/", favicon: "https://generator.ws/wp-content/uploads/2020/12/cropped-24b3206d-e1c5-426f-9c45-83ca5abd81cb-5-192x192.png", sub: "Drag-and-drop Bootstrap 5 theme builder in the browser.", cats: ["web"], subs: ["uxui", "cssjava"] },
+            { name: "CSS clip-path Editor", url: "https://codepen.io/stoumann/pen/abZxoOM", favicon: "https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4dccd4e21072c35f1b28de66c.ico", sub: "Interactive visual editor for CSS clip-path values.", cats: ["web"], subs: ["cssjava", "uxui"] },
+            { name: "reveal.js", url: "https://revealjs.com/", favicon: "https://revealjs.com/images/favicon.svg", sub: "Create beautiful fullscreen presentations in the browser.", cats: ["web"], subs: ["cssjava"] },
+            { name: "Noun Project", url: "https://thenounproject.com/", favicon: "https://static.production.thenounproject.com/img/favicons/favicon-32x32.015f779a87e7.png", sub: "Search over 3 million icons and photos.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "AI Picture Restorer", url: "https://hotpot.ai/restore-picture", favicon: "https://hotpot.ai/images/apple-touch-icon.png", sub: "Remove scratches, sharpen colors and enhance faces with AI.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Brand Guide Generator", url: "https://baseline.is/beta", favicon: "https://baseline.is/statics/icons/baseline-icon.svg", sub: "Create a complete brand guide in minutes.", cats: ["web", "graphic"], subs: ["logo"] },
+            { name: "Float Menu (Vue)", url: "https://github.com/prabhuignoto/vue-float-menu", favicon: "https://github.com/favicon.ico", sub: "Draggable, self-adjusting floating menu for Vue.", cats: ["web"], subs: ["uxui", "cssjava"] },
+            { name: "Phosphor Icons", url: "https://phosphoricons.com", favicon: "https://phosphoricons.com/favicon.ico", sub: "3528 flexible icons for interfaces, diagrams and more.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "dragmove.js", url: "https://github.com/knadh/dragmove.js", favicon: "https://github.com/favicon.ico", sub: "Make DOM elements draggable. Zero deps, 500 bytes.", cats: ["web"], subs: ["cssjava"] },
+            { name: "Calligrapher AI", url: "https://www.calligrapher.ai", favicon: "", sub: "Type text, get realistic AI handwriting as SVG.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Bootstrap Build", url: "https://bootstrap.build/", favicon: "https://bootstrap.build/favicon.png", sub: "Free Bootstrap 4 theme builder from scratch.", cats: ["web"], subs: ["uxui", "cssjava"] },
+            { name: "Halfmoon", url: "https://www.gethalfmoon.com/", favicon: "https://www.gethalfmoon.com/static/halfmoon/img/halfmoon-fav-alt.png", sub: "Front-end framework with built-in dark mode for dashboards.", cats: ["web"], subs: ["uxui", "cssjava"] },
+            { name: "BGJar", url: "https://bgjar.com/", favicon: "https://bgjar.com/bgjar-100x100.png", sub: "Free SVG background generator for websites and apps.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Anyfiddle", url: "https://www.anyfiddle.com/", favicon: "https://www.anyfiddle.com/favicon.ico", sub: "Any-language code playground. No setup required.", cats: ["web"], subs: ["other"] },
+            { name: "23 SEO Tips", url: "https://the-webdesigner.co/seo-for-web-designers/", favicon: "https://the-webdesigner.co/wp-content/uploads/2020/05/twd.png", sub: "Essential SEO knowledge every web designer should know.", cats: ["web"], subs: ["education"] },
+            { name: "Responsive Menu Generator", url: "https://wweb.dev/resources/navigation-generator", favicon: "https://wweb.dev/favicon.ico", sub: "Generate responsive navbars quickly.", cats: ["web"], subs: ["uxui", "cssjava"] },
+            { name: "One Word Domains", url: "https://www.oneword.domains/", favicon: "https://www.oneword.domains/static/assets/logo.svg", sub: "Browse available one-word domain names.", cats: ["web"], subs: ["other"] },
+            { name: "1-Line Layouts", url: "https://1linelayouts.glitch.me/", favicon: "", sub: "10 modern CSS layouts achievable in a single line.", cats: ["web"], subs: ["cssjava", "education"] },
+            { name: "JS Utilities", url: "https://1loc.dev/", favicon: "", sub: "Favourite JavaScript utilities in a single line of code.", cats: ["web"], subs: ["cssjava"] },
+            { name: "Text Fixer", url: "https://www.textfixer.com/", favicon: "https://www.textfixer.com/favicon.png", sub: "Free online tools for text conversion and HTML coding.", cats: ["graphic", "web"], subs: ["typography", "other"] },
+            { name: "HTML Cleaner", url: "https://html-cleaner.com/", favicon: "https://html-cleaner.com/favicon.ico", sub: "Cleans and formats HTML, CSS, and JavaScript.", cats: ["graphic", "web"], subs: ["other"] },
+            { name: "Google Fonts", url: "https://fonts.google.com/", favicon: "https://www.gstatic.com/images/branding/product/1x/google_fonts_ios_76dp.png", sub: "The best free font foundry for any project.", cats: ["graphic", "web"], subs: ["typography"] },
+            { name: "Fontjoy", url: "http://fontjoy.com/", favicon: "http://fontjoy.com/favicon32.gif", sub: "Font pairing made simple with visual preview.", cats: ["graphic", "web"], subs: ["typography"] },
+            { name: "70+ Best Free Fonts", url: "https://www.websiteplanet.com/blog/best-free-fonts/", favicon: "https://dt2sdf0db8zob.cloudfront.net/wp-content/themes/websiteplanet/img/favicons/favicon-32x32.png", sub: "Curated list of free fonts for commercial use.", cats: ["graphic", "web"], subs: ["typography"] },
+            { name: "Mixfont", url: "https://www.mixfont.com/", favicon: "https://www.mixfont.com/static/media/logo.99b66e98.png", sub: "Discover and visualize new font combinations.", cats: ["graphic", "web"], subs: ["typography"] },
+            { name: "Jost", url: "https://indestructibletype.com/Jost.html", favicon: "https://indestructibletype.com/assets/Favicon.png", sub: "Variable Futura-inspired font, free to use.", cats: ["graphic", "web"], subs: ["typography"] },
+            { name: "Font Combinations", url: "https://www.boldwebdesign.com.au/font-combinations-for-web-designers.html", favicon: "https://www.boldwebdesign.com.au/images/favicon.png", sub: "Curated collection of font pairings for web designers.", cats: ["graphic", "web"], subs: ["typography"] },
+            { name: "My Fonts", url: "https://www.myfonts.com/", favicon: "https://cdn.myfonts.net/s/images/icons/apple-touch-icon-57x57.png", sub: "Easy-to-navigate commercial font foundry.", cats: ["graphic", "web"], subs: ["typography"] },
+            { name: "Identifont", url: "http://www.identifont.com/", favicon: "http://www.identifont.com/images/icon-72.png", sub: "Identify fonts by answering questions about them.", cats: ["graphic", "web"], subs: ["typography"] },
+            { name: "Tabler Icons", url: "https://tablericons.com/", favicon: "https://tablericons.com/favicon.png", sub: "558 fully customizable SVG icons.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Freepik", url: "https://www.freepik.com/", favicon: "https://freepik.cdnpk.net/img/favicons/favicon.ico", sub: "Find free vectors, stock photos, PSD and icons.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Nicepage", url: "http://shrsl.com/17m3a-1tj1-rsto", favicon: "https://static.nicepage.com/images/site/nicepage.jpg", sub: "Browser-based builder for HTML5, Joomla and WordPress.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "Burst", url: "https://burst.shopify.com/", favicon: "https://burst.shopify.com/assets/global/favicon-ab7018e1fe708a49edcfecce3166032fbeeb1fd7ba4a078c366de344d32ee193.png", sub: "Free stock photos from Shopify.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Unsplash", url: "https://unsplash.com/", favicon: "https://unsplash.com/favicon.ico", sub: "Beautiful freely usable photos.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Moose", url: "https://photos.icons8.com/", favicon: "https://photos.icons8.com/photos/static/img/moose_favicon-2.ico", sub: "Free stock photos designed to work together.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Pexels", url: "https://www.pexels.com/", favicon: "https://www.pexels.com/favicon.ico", sub: "High-quality free stock photo catalogue.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Freerange", url: "https://freerangestock.com/", favicon: "", sub: "Free stock photo catalogue.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Muz.li", url: "https://search.muz.li", favicon: "https://search.muz.li/assets/images/favicon.png", sub: "Search engine for design inspiration by color or keyword.", cats: ["graphic", "web"], subs: ["inspiration"] },
+            { name: "siteInspire", url: "https://www.siteinspire.com/", favicon: "https://www.siteinspire.com/favicon.png", sub: "Showcase of the finest web and interactive design.", cats: ["web"], subs: ["inspiration"] },
+            { name: "StockLayouts", url: "https://www.stocklayouts.com", favicon: "https://www.stocklayouts.com/favicon.ico", sub: "Free graphic design templates for inspiration.", cats: ["graphic"], subs: ["stocks", "inspiration"] },
+            { name: "Image Compare Viewer", url: "https://github.com/kylewetton/image-compare-viewer", favicon: "https://github.com/favicon.ico", sub: "Responsive before/after image slider. Mobile friendly.", cats: ["web"], subs: ["uxui", "cssjava"] },
+            { name: "SendX Email Templates", url: "https://www.sendx.io/ultimate-free-email-template-collection", favicon: "https://uploads-ssl.webflow.com/5b290660f63aa8f936b69161/5b39fcaaf68bd3fd4af8695f_favicon-32x32.png", sub: "1500+ free responsive email templates.", cats: ["web", "graphic"], subs: ["stocks", "inspiration"] },
+            { name: "VectorPortal", url: "https://www.vectorportal.com/templates/", favicon: "https://www.vectorportal.com/favicon.ico", sub: "Free vectors and design templates.", cats: ["graphic", "web"], subs: ["stocks"] },
+            { name: "Google HTML/CSS Style Guide", url: "https://google.github.io/styleguide/htmlcssguide.html", favicon: "https://www.google.com/favicon.ico", sub: "Google's formatting and style rules for HTML and CSS.", cats: ["graphic", "web"], subs: ["education"] },
+            { name: "10 Best SEO Tools", url: "https://www.onlinerockershub.com/best-seo-tools.html", favicon: "", sub: "Best tools to boost organic traffic — mostly free.", cats: ["web"], subs: ["education"] },
+            { name: "Course Duck", url: "https://courseduck.com/programming/javascript/awards.php", favicon: "https://courseduck.com/wp-content/themes/reviews/images/favicon.ico", sub: "Compare and find the best online programming courses.", cats: ["web"], subs: ["cssjava", "education"] },
+            { name: "Logo Design — 4 Principles", url: "http://jsbmorse.com/4-principles-of-great-logo-design/", favicon: "", sub: "What makes a great logo, explained.", cats: ["graphic", "web"], subs: ["logo", "education"] },
+            { name: "Form Design", url: "https://adamsilver.io/articles/form-design-from-zero-to-hero-all-in-one-blog-post/", favicon: "https://adamsilver.io/favicon-32x32.png", sub: "Online form design best practices, zero to hero.", cats: ["web"], subs: ["education", "uxui"] },
+            { name: "Logo Presentation Tips", url: "http://millo.co/tips-on-presenting-logos-to-a-client", favicon: "http://millo.co/favicon.ico", sub: "7 tips on presenting logos to a client.", cats: ["graphic", "web"], subs: ["logo", "education"] },
+            { name: "Top 74 Logos", url: "http://www.zankrank.com/Ranqings/Default.aspx?currentRanqing=logos", favicon: "", sub: "Ranked list of the best logos — good for inspiration.", cats: ["graphic", "web"], subs: ["logo", "inspiration"] },
+            { name: "logolounge", url: "https://www.logolounge.com/", favicon: "https://www.logolounge.com/assets/favicons/apple-touch-icon-72x72.png", sub: "Logo catalogue for inspiration and education.", cats: ["graphic", "web"], subs: ["logo", "inspiration"] },
+            { name: "Better Font Finder", url: "https://jmattthew.github.io/better-font-finder/better-font-finder.html", favicon: "", sub: "Find Google Fonts by visual similarity.", cats: ["graphic", "web"], subs: ["typography"] },
+            { name: "Google Font Combinations", url: "https://theultralinx.com/2015/04/best-google-web-font-combinations/", favicon: "https://theultralinx.com/favicon.ico", sub: "The best Google Font pairings, curated.", cats: ["graphic", "web"], subs: ["typography", "inspiration"] },
+            { name: "Font Pairing Guide", url: "https://designschool.canva.com/blog/the-ultimate-guide-to-font-pairing/", favicon: "https://designschool.canva.com/wp-content/themes/canva/img/icons/apple-touch-icon-precomposed.png", sub: "Canva's ultimate guide to font pairing.", cats: ["graphic", "web"], subs: ["typography", "education"] },
+            { name: "Font Pair", url: "http://fontpair.co", favicon: "http://fontpair.co/img/card.jpg", sub: "Tool to pair Google Fonts together beautifully.", cats: ["graphic", "web"], subs: ["typography"] },
+            { name: "Responsive Typography", url: "http://www.creativebloq.com/how-to/the-rules-of-responsive-web-typography", favicon: "http://www.creativebloq.com/20171103/apple-touch-icon.png", sub: "Rules and principles for responsive web typography.", cats: ["web"], subs: ["typography", "education"] },
+            { name: "F37 Foundry", url: "http://www.f37foundry.com", favicon: "http://www.f37foundry.com/favicon.ico", sub: "Font foundry with a great Type Tester.", cats: ["graphic", "web"], subs: ["typography", "inspiration"] },
+            { name: "Froala Design Blocks", url: "https://www.froala.com/design-blocks", favicon: "https://cdn0.froala.com/assets/favicons/favicon-96x96-2d1ca0ffaf4ee21a924402184ebbef02.png", sub: "170+ responsive Bootstrap design blocks.", cats: ["web"], subs: ["uxui", "inspiration"] },
+            { name: "Interfaces.pro", url: "https://interfaces.pro/", favicon: "https://interfaces.pro/wp-content/themes/interfaces/pictures/apple-touch-icon.png", sub: "Collection of UI design examples from around the web.", cats: ["web"], subs: ["uxui", "inspiration"] },
+            { name: "Best Website Gallery", url: "https://bestwebsite.gallery/", favicon: "https://bestwebsite.gallery/assets/images/bitmap/favicon/apple-touch-icon-72x72.png", sub: "Curated samples of excellent websites.", cats: ["web"], subs: ["inspiration"] },
+            { name: "CSSnectar", url: "https://cssnectar.com/", favicon: "https://i2.wp.com/cssnectar.com/wp-content/uploads/2016/04/favicon.png", sub: "Triple-vetted inspirational websites.", cats: ["web"], subs: ["inspiration"] },
+            { name: "20 Split Screen Designs", url: "https://line25.com/inspiration/split-screen-website-designs", favicon: "https://line25.com/favicon.ico", sub: "Showcase of 20 split-screen website examples.", cats: ["web"], subs: ["inspiration"] },
+            { name: "Free PSD Templates", url: "https://www.themexpert.com/blog/top-free-psd-website-templates", favicon: "https://www.themexpert.com/favicon.ico", sub: "50+ free PSD website templates.", cats: ["web"], subs: ["inspiration", "stocks"] },
+            { name: "Dribble", url: "https://dribbble.com/", favicon: "https://cdn.dribbble.com/assets/favicon-63b2904a073c89b52b19aa08cebc16a154bcf83fee8ecc6439968b1e6db569c7.ico", sub: "Show, tell, promote and discover design work.", cats: ["web"], subs: ["inspiration", "stocks"] },
+            { name: "Really Good Emails", url: "http://reallygoodemails.com/", favicon: "http://reallygoodemails.com/wp-content/uploads/2014/10/apple-touch-icon-72x72.png", sub: "Best showcase of email design on the web.", cats: ["web"], subs: ["inspiration"] },
+            { name: "Nice Portfolio", url: "http://niceportfol.io/", favicon: "", sub: "The nicest design portfolios on the web.", cats: ["web"], subs: ["inspiration"] },
+            { name: "CallToIdea", url: "http://calltoidea.com/", favicon: "http://calltoidea.com/application/images//apple-touch-icon.png", sub: "Web design element examples and solutions.", cats: ["web"], subs: ["inspiration"] },
+            { name: "Lapa", url: "http://www.lapa.ninja/", favicon: "http://www.lapa.ninja/favicon.ico", sub: "Landing page design showcase.", cats: ["web"], subs: ["inspiration"] },
+            { name: "JAM Icons", url: "https://jam-icons.com/", favicon: "https://jam-icons.com/favicon.ico", sub: "Handcrafted pixel-perfect icons in font and SVG.", cats: ["web"], subs: ["uxui", "stocks"] },
+            { name: "Easy CSS3 Generator", url: "https://css3gen.com/", favicon: "https://css3gen.com/favicon.ico", sub: "Generate and copy CSS3 snippets visually.", cats: ["web"], subs: ["uxui", "cssjava"] },
+            { name: "MediaQuery Generator", url: "http://giona.net/tools/css3-mediaquery-generator/", favicon: "http://giona.net/favicon.ico", sub: "Easy-to-use visual MediaQuery generator.", cats: ["web"], subs: ["cssjava"] },
+            { name: "web.dev by Google", url: "https://web.dev", favicon: "https://www.gstatic.com/devrel-devsite/va3e6d7c495ae58d2f0c21ab1e6f48fa6e19121edf44f1cc6af04d15995811aa0/web/images/favicon@2x.png", sub: "Learn and apply modern web capabilities.", cats: ["web"], subs: ["education", "other"] },
+            { name: ".htaccess Generator", url: "https://www.htaccessredirect.net/", favicon: "https://www.htaccessredirect.net/favicon.ico", sub: "Easy .htaccess generator with many options.", cats: ["web"], subs: ["other"] },
+            { name: "Flexy Boxes", url: "http://the-echoplex.net/flexyboxes/", favicon: "", sub: "Flexbox playground and code generator.", cats: ["web"], subs: ["flexbox"] },
+            { name: "CSS Grid Playground", url: "https://mozilladevelopers.github.io/playground/css-grid", favicon: "https://mozilladevelopers.github.io/playground/static/favicon.d4f1f46b.ico", sub: "Learn CSS Grid Layout with interactive Firefox DevTools.", cats: ["web"], subs: ["cssgrid", "education"] },
+            { name: "Now UI Kit", url: "https://www.creative-tim.com/product/now-ui-kit", favicon: "https://www.creative-tim.com/favicon.ico", sub: "Free Bootstrap 4 UI kit with 50+ elements.", cats: ["web"], subs: ["uxui"] },
+            { name: "Archetype", url: "https://archetypeapp.com/", favicon: "https://archetypeapp.com/favicon.ico", sub: "Create consistent web typography live in the browser.", cats: ["web"], subs: ["typography"] },
+            { name: "Webwide", url: "https://hello.webwide.io", favicon: "https://hello.webwide.io/assets/images/favicon.png", sub: "Inclusive discussion community for web makers.", cats: ["web"], subs: ["other"] },
+            { name: "Ackee", url: "https://ackee.electerious.com/", favicon: "https://ackee.electerious.com/assets/images/favicon.ico", sub: "Self-hosted Node.js analytics that respects privacy.", cats: ["web"], subs: ["other"] },
+            { name: "Games for Designers", url: "https://medium.com/@islanderua/browser-games-for-designers-aa496c4e710c", favicon: "https://cdn-static-1.medium.com/_/fp/icons/favicon-rebrand-medium.3Y6xpZ-0FSdWDnPM3hSBIA.ico", sub: "8 educational browser games for precise, structured thinkers.", cats: ["web"], subs: ["education"] },
+            { name: "Invoice Template", url: "https://invoicetemplate.co/", favicon: "https://invoicetemplate.co/assets/favicon-32x32-e9a0a2794be2d7ee9738517e14557f6b56b7a5568bbc4a6e54074f7e83b00f0d.png", sub: "Create and send invoices fast and free.", cats: ["web"], subs: ["other"] },
+            { name: "Icons8", url: "https://icons8.com/c/animated-icons", favicon: "https://maxst.icons8.com/favicon.ico", sub: "60k flat icons plus free animated icons.", cats: ["web"], subs: ["uxui", "stocks", "animation"] },
+            { name: "Motion Icons", url: "https://motionicons.com", favicon: "https://motionicons.com/favicon.ico", sub: "Beautiful animated SVG icons.", cats: ["web"], subs: ["uxui", "stocks", "animation"] },
+            { name: "The Noun Project", url: "https://thenounproject.com", favicon: "https://static.production.thenounproject.com/img/nounproject_logo.60e860f212a5.png", sub: "Over a million curated icons from a global community.", cats: ["web"], subs: ["uxui", "stocks"] },
+            { name: "30 Seconds of CSS", url: "https://www.30secondsofcode.org/", favicon: "https://www.30secondsofcode.org/icons/icon-48x48.png", sub: "Useful CSS snippets you can understand in 30 seconds.", cats: ["web"], subs: ["cssjava"] },
+            { name: "CSS Selectors Cheatsheet", url: "https://frontend30.com/css-selectors-cheatsheet/", favicon: "https://frontend30.com/wp-content/uploads/fbrfg/favicon-32x32.png", sub: "Interactive quiz and reference for CSS selectors.", cats: ["web"], subs: ["cssjava", "education"] },
+            { name: "Free Frontend", url: "http://freefrontend.com/", favicon: "http://freefrontend.com/favicon.ico", sub: "CSS solutions, code snippets and examples.", cats: ["web"], subs: ["stocks", "uxui", "inspiration", "cssjava"] },
+            { name: "Shards UI Kit", url: "https://designrevision.com/downloads/shards/", favicon: "https://designrevision.com/favicons/apple-touch-icon.png", sub: "Free wholesome Bootstrap 4 UI kit.", cats: ["web"], subs: ["uxui"] },
+            { name: "Postleaf CMS", url: "https://www.postleaf.org/", favicon: "https://www.postleaf.org/uploads/2017/05/favicon.png", sub: "Beautiful open-source Node.js blogging platform.", cats: ["web"], subs: ["cms"] },
+            { name: "Grav CMS", url: "https://getgrav.org/", favicon: "https://getgrav-grav.netdna-ssl.com/user/themes/planetoid/images/favicon.png", sub: "Simple and fast flat-file CMS.", cats: ["web"], subs: ["cms"] },
+            { name: "PageKit CMS", url: "https://pagekit.com/", favicon: "https://pagekit.com/app/system/modules/theme/apple_touch_icon.png", sub: "Small, fast CMS built on Vue.js.", cats: ["web"], subs: ["cms"] },
+            { name: "Pico CMS", url: "http://picocms.org/", favicon: "http://picocms.org/style/images/favicon.png", sub: "Creating a site is as simple as editing text files.", cats: ["web"], subs: ["cms"] },
+            { name: "Super Tiny Social Icons", url: "https://github.com/edent/SuperTinyIcons", favicon: "https://github.com/favicon.ico", sub: "Minuscule SVG social icons — under 600 bytes each.", cats: ["web"], subs: ["stocks", "uxui"] },
+            { name: "Free Illustrations", url: "https://lukaszadam.com/illustrations", favicon: "https://lukaszadam.com/logo.svg", sub: "Free vector illustrations and icons for any use.", cats: ["web"], subs: ["stocks", "uxui"] },
+            { name: "unDraw", url: "https://undraw.co/illustrations", favicon: "https://undraw.co/favicon-32x32.png", sub: "MIT-licensed SVG illustrations — no attribution needed.", cats: ["web"], subs: ["stocks", "uxui"] },
+            { name: "Silhouette Sets", url: "https://www.hongkiat.com/blog/85-free-high-quality-silhouette-sets/", favicon: "", sub: "50 free high-quality silhouette sets.", cats: ["web"], subs: ["stocks"] },
+            { name: "FullPage.js", url: "https://alvarotrigo.com/fullPage/", favicon: "https://alvarotrigo.com/fullPage/favicons/favicon.ico", sub: "Create fullscreen scrolling sites with horizontal slides.", cats: ["web"], subs: ["cssjava"] },
+            { name: "AOS", url: "http://michalsnik.github.io/aos/", favicon: "", sub: "Animate On Scroll library with many built-in effects.", cats: ["web"], subs: ["animation", "cssjava"] },
+            { name: "Ramjet", url: "http://www.rich-harris.co.uk/ramjet/", favicon: "", sub: "Element morphing — one DOM element transforms into another.", cats: ["web"], subs: ["animation", "cssjava"] },
+            { name: "CountUp.js", url: "http://inorganik.github.io/countUp.js/", favicon: "", sub: "Lightweight JS class for count-up number animations.", cats: ["web"], subs: ["animation", "cssjava"] },
+            { name: "15 Free Icon Sets", url: "https://www.webdesignerdepot.com/2017/04/15-essential-free-icon-sets/", favicon: "", sub: "Curated article on essential free flat icon sets.", cats: ["web"], subs: ["stocks", "uxui"] },
+            { name: "Button Hover Effects", url: "https://freebiesupply.com/blog/css-button-hover-effects/", favicon: "", sub: "Collection of CSS button hover effect examples.", cats: ["web"], subs: ["cssjava", "inspiration"] },
+            { name: "Rellax.js", url: "https://dixonandmoe.com/rellax/", favicon: "", sub: "Dependency-free vanilla JS parallax scrolling.", cats: ["web"], subs: ["animation", "cssjava"] },
+            { name: "Rallax.js", url: "https://chriscavs.github.io/rallax-demo/", favicon: "", sub: "Dynamic parallax scrolling, no dependencies.", cats: ["web"], subs: ["animation", "cssjava"] },
+            { name: "t-scroll", url: "https://t-scroll.com/demo.html", favicon: "https://t-scroll.com/theme/images/favicon.png", sub: "Animate on scroll library with varied effects.", cats: ["web"], subs: ["animation", "cssjava"] },
+            { name: "CSS Scroll Snap", url: "https://codepen.io/chaofix/pen/6535aca9fcfa4d0ea8aca690181cc128", favicon: "https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4dccd4e21072c35f1b28de66c.ico", sub: "Pure CSS scroll snap slideshow — both axes.", cats: ["web"], subs: ["cssjava"] },
+            { name: "Canva", url: "http://www.canva.com", favicon: "http://www.canva.com/favicon.ico", sub: "Visual online design editor for anyone.", cats: ["web"], subs: ["inspiration"] },
+            { name: "Topol.io", url: "https://topol.io/", favicon: "https://topol.io/favicon.ico", sub: "Online email editor for beautiful responsive messages.", cats: ["web"], subs: ["inspiration"] },
+            { name: "Web Launch Checklist", url: "https://weblaunchchecklist.com/", favicon: "https://weblaunchchecklist.com/favicon.ico", sub: "Very useful pre-launch checklist for websites.", cats: ["web"], subs: ["other"] },
+            { name: "Word Counter", url: "https://wordcounter.io/", favicon: "https://wordcounter.io/assets/images/favicon.png", sub: "Count characters, words, sentences and pages.", cats: ["web"], subs: ["other"] },
+            { name: "CSS Grid Generator", url: "https://jhpratt.github.io/grid/", favicon: "", sub: "Simple visual CSS grid code generator.", cats: ["web"], subs: ["cssgrid"] },
+            { name: "Ultimate CSS Generator", url: "https://webcode.tools/css-generator", favicon: "https://webcode.tools/img/favicon.png", sub: "Visual CSS generator — copy snippets to your projects.", cats: ["web"], subs: ["cssjava"] },
+            { name: "Sizzy", url: "https://sizzy.co/", favicon: "https://sizzy.co/favicon.ico", sub: "Preview your site on multiple devices at once.", cats: ["web"], subs: ["other"] },
+            { name: "TinEye", url: "https://tineye.com", favicon: "https://tineye.com/favicon.ico", sub: "Reverse image search — find where an image appears online.", cats: ["web"], subs: ["other"] },
+            { name: "dotcom-tools", url: "https://www.dotcom-tools.com", favicon: "", sub: "Website performance snapshot from dozens of global locations.", cats: ["web"], subs: ["other"] },
+            { name: "Solis", url: "https://solisapp.com", favicon: "https://solisapp.com/favicon.png", sub: "Real-time multi-viewport CSS/HTML previewing for Mac.", cats: ["web"], subs: ["other"] },
+            { name: "Bonsai", url: "https://www.hellobonsai.com/freelance-proposals", favicon: "", sub: "Create, send and track freelance proposals online.", cats: ["web"], subs: ["other"] },
+            { name: "Forms.id", url: "https://forms.id", favicon: "https://forms.id/favicon.ico", sub: "Privacy-first alternative to Google Forms and Typeform.", cats: ["web"], subs: ["other"] },
+            { name: "CSS Grid Cheat Sheet", url: "https://alialaa.github.io/css-grid-cheat-sheet/", favicon: "", sub: "Ultimate CSS grid visual reference guide.", cats: ["web"], subs: ["cssgrid", "education"] },
+            { name: "Compressor.io", url: "https://compressor.io/compress", favicon: "", sub: "Drastically reduce image size while maintaining quality.", cats: ["web"], subs: ["other"] },
+            { name: "Squoosh", url: "https://squoosh.app", favicon: "https://squoosh.app/assets/favicon.ico", sub: "Google's powerful image compression with modern codecs.", cats: ["web"], subs: ["other"] },
+            { name: "Flipping Content", url: "http://css3.bradshawenterprises.com/flip/", favicon: "http://css3.bradshawenterprises.com/favicon.ico", sub: "Flip an image to a div with CSS 3D transforms.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "CSS Icon Animate", url: "http://cssicon.space/#/", favicon: "http://cssicon.space/favicon.png", sub: "Free animated CSS icons collection.", cats: ["web"], subs: ["uxui", "stocks", "animation"] },
+            { name: "Bootstrap", url: "http://getbootstrap.com/", favicon: "http://getbootstrap.com/favicon.ico", sub: "The world's most popular CSS and JS framework.", cats: ["web"], subs: ["uxui", "cssjava"] },
+            { name: "Foundation", url: "https://foundation.zurb.com/", favicon: "https://foundation.zurb.com/assets/img/icons/foundation-favicon.ico", sub: "Professional CSS and JS framework.", cats: ["web"], subs: ["uxui", "cssjava"] },
+            { name: "Kube", url: "https://imperavi.com/kube/", favicon: "https://imperavi.com/favicon.ico", sub: "Minimalist CSS and JS framework.", cats: ["web"], subs: ["uxui", "cssjava"] },
+            { name: "Quantity Query", url: "http://quantityqueries.com/", favicon: "http://quantityqueries.com/images/icon.png", sub: "Build CSS selectors that style based on sibling count.", cats: ["web"], subs: ["cssjava"] },
+            { name: "Ratio Buddy", url: "http://ratiobuddy.com/", favicon: "http://ratiobuddy.com/favicon.ico", sub: "Happy little tool to calculate aspect ratios.", cats: ["web"], subs: ["other"] },
+            { name: "SVGOMG", url: "https://jakearchibald.github.io/svgomg/", favicon: "https://jakearchibald.github.io/svgomg/imgs/icon.png", sub: "Minimize and clean SVG files online.", cats: ["web"], subs: ["other"] },
+            { name: "CSS Pie Chart Generator", url: "https://bennettfeely.com/csspiechart/", favicon: "https://bennettfeely.com/csspiechart/img/favicon-32x32.png", sub: "Generate CSS pie charts using conic-gradient().", cats: ["web"], subs: ["cssjava"] },
+            { name: "Ceaser", url: "https://matthewlein.com/tools/ceaser", favicon: "", sub: "CSS easing animation tool with visual preview.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "Excel to HTML", url: "http://pressbin.com/tools/excel_to_html_table/index.html", favicon: "", sub: "Paste Excel data, get a clean HTML table.", cats: ["web"], subs: ["other"] },
+            { name: "Real Favicon Generator", url: "https://realfavicongenerator.net/", favicon: "https://realfavicongenerator.net/the_favicon/apple-touch-icon.png", sub: "Create favicons for all browsers and platforms.", cats: ["web"], subs: ["other"] },
+            { name: "favicon.io", url: "https://favicon.io/", favicon: "https://favicon.io/favicon.ico", sub: "Design and generate favicons easily.", cats: ["web"], subs: ["other"] },
+            { name: "Pantone to HEX", url: "https://margaret2.github.io/pantone-colors/", favicon: "", sub: "Convert Pantone colours to HEX codes.", cats: ["web"], subs: ["colours"] },
+            { name: "Tint & Shade Generator", url: "https://maketintsandshades.com", favicon: "https://maketintsandshades.com/favicon-32x32.png", sub: "Produce tints and shades of any hex color in 10% steps.", cats: ["web"], subs: ["colours"] },
+            { name: "Palleton", url: "http://paletton.com/", favicon: "http://paletton.com/favicon.ico", sub: "Colour scheme designer with visual preview.", cats: ["web"], subs: ["colours"] },
+            { name: "Adobe Color CC", url: "https://color.adobe.com/create/color-wheel/", favicon: "https://color.adobe.com/colorfavicon.ico", sub: "Adobe's color wheel and palette generator.", cats: ["graphic", "web"], subs: ["colours"] },
+            { name: "CSS Gradient Generator", url: "http://www.cssportal.com/css-gradient-generator/", favicon: "http://www.cssportal.com/favicon.ico", sub: "Produce CSS gradient code with a visual UI.", cats: ["web"], subs: ["colours", "cssjava"] },
+            { name: "Material Design Palette", url: "https://www.materialpalette.com/", favicon: "https://www.materialpalette.com/assets/favicon-194de522705d2d8afb93874e197fa6f14188290aaf3625007bf4774933901cc1.ico", sub: "Pick two Material Design colours and generate a palette.", cats: ["web"], subs: ["colours", "cssjava"] },
+            { name: "Material Design Colours", url: "https://www.materialui.co/colors", favicon: "https://www.materialui.co/img/favicon.gif", sub: "Full Material Design colour palette reference.", cats: ["web"], subs: ["colours"] },
+            { name: "WebGradients", url: "https://webgradients.com/", favicon: "https://webgradients.com/favicons/apple-touch-icon-72x72.png", sub: "180 free linear gradients for website backdrops.", cats: ["web"], subs: ["colours", "cssjava"] },
+            { name: "ColorMe", url: "https://colorme.io/", favicon: "https://colorme.io/favicon.ico", sub: "Visualize the CSS Color function interactively.", cats: ["web"], subs: ["colours", "cssjava"] },
+            { name: "Colormind", url: "http://colormind.io/", favicon: "http://colormind.io/favicon32.gif", sub: "AI-powered colour scheme generator trained on art and film.", cats: ["graphic", "web"], subs: ["colours"] },
+            { name: "Learning CSS Grids", url: "http://varun.ca/css-grid/", favicon: "http://varun.ca/apple-touch-icon.png", sub: "Comprehensive article guide to CSS Grid.", cats: ["web"], subs: ["cssgrid", "education"] },
+            { name: "Turn.js", url: "http://www.turnjs.com/", favicon: "http://www.turnjs.com/favicon.ico", sub: "Make content look like a real book or magazine with HTML5.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "Flexbox Grid", url: "http://flexboxgrid.com/", favicon: "", sub: "Grid system built on the flex display property.", cats: ["web"], subs: ["flexbox"] },
+            { name: "Solved by Flexbox", url: "https://philipwalton.github.io/solved-by-flexbox/", favicon: "", sub: "Cleaner, hack-free CSS solutions using Flexbox.", cats: ["web"], subs: ["flexbox", "education"] },
+            { name: "Flexibility", url: "https://jonathantneal.github.io/flexibility/", favicon: "", sub: "Visual tool for setting Flexbox row parameters.", cats: ["web"], subs: ["flexbox"] },
+            { name: "FontAwesome", url: "http://fontawesome.io/icons/", favicon: "http://fontawesome.io/assets/ico/favicon.ico", sub: "The most popular free icon catalogue for the web.", cats: ["web"], subs: ["uxui", "stocks"] },
+            { name: "Text Shadow Effects", url: "https://freefrontend.com/css-text-shadow-effects/", favicon: "https://freefrontend.com/favicon-32x32.png", sub: "Hand-picked CSS text shadow effect examples.", cats: ["web"], subs: ["cssjava", "inspiration"] },
+            { name: "Moving Letters", url: "http://tobiasahlin.com/moving-letters/", favicon: "http://tobiasahlin.com/images/favicon.ico", sub: "Directory of animated text effects — pick and copy code.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "iHover", url: "http://gudh.github.io/ihover/dist/index.html", favicon: "", sub: "Impressive hover effects powered by pure CSS3.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "animista", url: "http://animista.net/", favicon: "http://animista.net/favicon.ico", sub: "CSS animations on demand — choose and get code.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "keyframes.app", url: "https://keyframes.app/animate/", favicon: "https://keyframes.app/media/favicon.png", sub: "Visual timeline to create and run CSS animations.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "Stack Motion Hover", url: "https://tympanus.net/Development/StackMotionHoverEffects/", favicon: "https://tympanus.net/Development/StackMotionHoverEffects/favicon.ico", sub: "Decorative motion hover effects collection.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "Animated Letters", url: "https://tympanus.net/Development/AnimatedLetters/index.html", favicon: "https://tympanus.net/Development/StackMotionHoverEffects/favicon.ico", sub: "Artistically animated SVG font using Segment library.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "Google Web Designer", url: "https://www.google.com/webdesigner/", favicon: "https://www.google.com/webdesigner/images/favicon.ico", sub: "Create interactive HTML5 designs and motion graphics.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "Animated SVG Icons", url: "https://tympanus.net/Development/AnimatedSVGIcons/", favicon: "https://tympanus.net/Development/StackMotionHoverEffects/favicon.ico", sub: "Library of animated SVG icons using Snap.svg.", cats: ["web"], subs: ["cssjava", "animation", "stocks"] },
+            { name: "Vivus Instant", url: "https://maxwellito.github.io/vivus-instant/", favicon: "", sub: "SVG stroke animation — drag, drop, configure.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "CSS Shake", url: "https://elrumordelaluz.github.io/csshake/", favicon: "", sub: "CSS classes to shake any DOM element.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "Hover.css", url: "http://ianlunn.github.io/Hover/", favicon: "", sub: "CSS3 hover effects for links, buttons, logos and SVG.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "TypeIt", url: "https://macarthur.me/typeit/", favicon: "https://macarthur.me/typeit/assets/img/favicon.ico", sub: "The most versatile jQuery typing animation plugin.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "Joomla", url: "https://joomla.org", favicon: "https://joomla.org/favicon.ico", sub: "Award-winning open-source CMS.", cats: ["web"], subs: ["cms"] },
+            { name: "Responsive Screenshots", url: "https://snapx.io/", favicon: "https://snapx.io/cdn/57f37852aedac6174111088d/5819c779c5fddf0f70abd483_favicon.png", sub: "Capture a pack of responsive-sized screenshots.", cats: ["web"], subs: ["other"] },
+            { name: "Frappé Charts", url: "https://frappe.github.io/charts/", favicon: "", sub: "GitHub-inspired charts with zero dependencies.", cats: ["web"], subs: ["cssjava"] },
+            { name: "Google Charts", url: "https://developers.google.com/chart/", favicon: "https://developers.google.com/_static/eefe16f3ea/images/favicon.png", sub: "Powerful, simple and free interactive chart tools.", cats: ["web"], subs: ["cssjava"] },
+            { name: "Logo Crunch", url: "http://brandmark.io/logo-crunch/", favicon: "", sub: "Multi-resolution logo maker using computer vision.", cats: ["web"], subs: ["logo"] },
+            { name: "Resume Worded", url: "https://resumeworded.com", favicon: "", sub: "Resume lines that helped candidates get into top companies.", cats: ["web", "graphic"], subs: ["other"] },
+            { name: "threed.io", url: "http://threed.io", favicon: "http://threed.io/favicon-96x96.png", sub: "Generate 3D mockups in your browser, free.", cats: ["web", "graphic"], subs: ["other"] },
+            { name: "basicScroll", url: "https://basicscroll.electerious.com", favicon: "https://basicscroll.electerious.com/assets/images/favicon.ico", sub: "Parallax scrolling with CSS variables based on scroll position.", cats: ["web"], subs: ["cssjava", "animation"] },
+            { name: "Fontisto", url: "http://www.fontisto.com/icons", favicon: "http://www.fontisto.com/assets/images/touch/fontisto-192.png", sub: "552+ free icons — the iconic font and CSS toolkit.", cats: ["web"], subs: ["uxui", "stocks"] },
+            { name: "BoxIcons", url: "https://boxicons.com", favicon: "https://boxicons.com/static/img/favicon.ico", sub: "350+ carefully designed free icons.", cats: ["web"], subs: ["uxui", "stocks"] },
+        ];
+
+        const PILL_ORDER = ["uxui", "animation", "colours", "typography", "inspiration", "cssjava", "education", "flexbox", "cssgrid", "logo", "cms", "stocks", "other"];
+        const PILL_LABELS = { uxui: "UX/UI", animation: "Animation", colours: "Colours", typography: "Typography", inspiration: "Inspiration", cssjava: "CSS/JS", education: "Education", flexbox: "Flexbox", cssgrid: "Grid", logo: "Logo", cms: "CMS", stocks: "Assets", other: "Other" };
+
+        let activeCat = "all", activeSub = "all", query = "";
+
+        function getInitial(name) { return name.trim()[0].toUpperCase(); }
+
+        function makeIcon(tool) {
+            if (tool.favicon) {
+                return `<img src="${tool.favicon}" alt="" onerror="this.parentNode.innerHTML='<span class=icon-letter>${getInitial(tool.name)}</span>'" loading="lazy">`;
+            }
+            return `<span class="icon-letter">${getInitial(tool.name)}</span>`;
+        }
+
+        function makePills(tool) {
+            return tool.subs
+                .filter(s => PILL_ORDER.includes(s))
+                .sort((a, b) => PILL_ORDER.indexOf(a) - PILL_ORDER.indexOf(b))
+                .slice(0, 2)
+                .map(s => `<span class="pill p-${s}">${PILL_LABELS[s]}</span>`)
+                .join("");
+        }
+
+        function render() {
+            const q = query.toLowerCase();
+            const filtered = TOOLS.filter(t => {
+                const catOk = activeCat === "all" || t.cats.includes(activeCat);
+                const subOk = activeSub === "all" || t.subs.includes(activeSub);
+                const qOk = !q || t.name.toLowerCase().includes(q) || t.sub.toLowerCase().includes(q);
+                return catOk && subOk && qOk;
+            });
+            document.getElementById("dir-count").innerHTML = `<b>${filtered.length}</b> tool${filtered.length !== 1 ? "s" : ""}`;
+            const grid = document.getElementById("dir-grid");
+            if (!filtered.length) {
+                grid.innerHTML = `<div class="empty"><strong>No results</strong>Try different filters or a shorter search</div>`;
+                return;
+            }
+            grid.innerHTML = filtered.map(t => `
+<a class="card" href="${t.url}" target="_blank" rel="noopener">
+  <div class="card-icon-wrap">
+    <div class="card-icon">${makeIcon(t)}</div>
+    <div class="card-pills">${makePills(t)}</div>
+  </div>
+  <div class="card-body">
+    <div class="card-name">${t.name}</div>
+    <div class="card-sub">${t.sub}</div>
+    <div class="card-footer">
+      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M4 2h6v6"/></svg>
+      Visit
+    </div>
+  </div>
+</a>`).join("");
+        }
+
+        document.getElementById("dir-search").addEventListener("input", e => { query = e.target.value; render(); });
+        document.getElementById("catRow").addEventListener("click", e => {
+            const b = e.target.closest("[data-cat]"); if (!b) return;
+            activeCat = b.dataset.cat;
+            document.querySelectorAll("#catRow .chip").forEach(c => c.classList.toggle("on", c.dataset.cat === activeCat));
+            render();
+        });
+        document.getElementById("subRow").addEventListener("click", e => {
+            const b = e.target.closest("[data-sub]"); if (!b) return;
+            activeSub = b.dataset.sub;
+            document.querySelectorAll("#subRow .chip").forEach(c => c.classList.toggle("on", c.dataset.sub === activeSub));
+            render();
+        });
+
+        render();
+    </script>
+</body>
+
+</html>
